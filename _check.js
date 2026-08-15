@@ -1,0 +1,12 @@
+const fs=require('fs');
+const h=fs.readFileSync('detective_game.html','utf8');
+const m=h.match(/<script>([\s\S]*)<\/script>/);
+new Function(m[1]);
+console.log('JS 语法检查通过');
+const re=/solution:/{/s*murderer:"([^"]+)",/s*weapon:"([^"]+)",/s*room:"([^"]+)"/s*/}/g;
+const sols=[...h.matchAll(re)].map(x=>x[1]+' / '+x[2]+' / '+x[3]);
+console.log('三卷真相：');
+sols.forEach((s,i)=>console.log('  卷'+(i+1)+': '+s));
+console.log('三卷互不相同:', new Set(sols).size===3);
+console.log('scene 条目数(应为18=3卷×6):', (h.match(/scene:/g)||[]).length);
+console.log('alibi 条目数(应为18=3卷×6):', (h.match(/alibi:/g)||[]).length);
